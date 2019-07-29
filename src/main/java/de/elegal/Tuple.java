@@ -13,7 +13,7 @@ public class Tuple<T, U> {
         this.t = t;
     }
 
-    public void setU(U u) {
+    public void setSecond(U u) {
         this.u = u;
     }
 
