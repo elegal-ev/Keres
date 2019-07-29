@@ -4,18 +4,40 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * The testing class for the generic tuple
+ *
+ * @author Valerius Mattfeld, Lars Quentin
+ */
 public class TupleTest {
+    /**
+     * Just an Tuple of Integers
+     */
     private static Tuple<Integer, Integer> intTuple;
+
+    /**
+     * Just an Tuple of Doubles
+     */
     private static Tuple<Double, Double> doubleTuple;
+
+    /**
+     * Just an Tuple of Strings
+     */
     private static Tuple<Integer, String> stringTuple;
 
+    /**
+     * Setup-Method. Gets called before every tests and generates 3 tuples
+     */
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         intTuple = new Tuple<>(3, 3);
         doubleTuple = new Tuple<>(1.0, Math.PI);
         stringTuple = new Tuple<>(42, "Hallo");
     }
 
+    /**
+     * Checking if accessing the second element works
+     */
     @Test
     public void getSecond() {
         int sndInt = intTuple.getSecond();
@@ -27,6 +49,9 @@ public class TupleTest {
         Assert.assertEquals("Hallo", sndStrInt);
     }
 
+    /**
+     * Checking if accessing the first element works
+     */
     @Test
     public void getFirst() {
         int fstInt = intTuple.getFirst();
@@ -38,6 +63,9 @@ public class TupleTest {
         Assert.assertEquals(42, fstStrInt);
     }
 
+    /**
+     * Checking if setting the first argument works
+     */
     @Test
     public void setFirst() {
         intTuple.setFirst(1);
@@ -53,6 +81,9 @@ public class TupleTest {
         Assert.assertEquals(100, fstStrInt);
     }
 
+    /**
+     * Checking if setting the second argument works
+     */
     @Test
     public void setSecond() {
         intTuple.setSecond(1);
