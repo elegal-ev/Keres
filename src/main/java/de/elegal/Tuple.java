@@ -1,5 +1,7 @@
 package de.elegal;
 
+import java.util.Objects;
+
 /**
  * Just a generic Tuple whenever its needed to store 2 Values
  * @param <T> The first generic value
@@ -23,8 +25,8 @@ public class Tuple<T, U> {
      * @param u the second generic Type
      */
     public Tuple(T t, U u) {
-        this.t = t;
-        this.u = u;
+        setFirst(t);
+        setSecond(u);
     }
 
     /**
@@ -32,6 +34,7 @@ public class Tuple<T, U> {
      * @param t the new first generic type
      */
     public void setFirst(T t) {
+        Objects.requireNonNull(t, "First parameter was null!");
         this.t = t;
     }
 
@@ -40,6 +43,7 @@ public class Tuple<T, U> {
      * @param u the new second generic type
      */
     public void setSecond(U u) {
+        Objects.requireNonNull(u, "Second parameter was null!");
         this.u = u;
     }
 
