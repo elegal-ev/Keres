@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author Lars Quentin, Valerius Mattfeld
  */
-public class DocumentUtilsIOTest extends DocumentUtilsTest{
+public class DocumentUtilsIOTest extends DocumentUtilsTest {
 
     /**
      * Checks whether the loaded file is null
@@ -32,7 +32,7 @@ public class DocumentUtilsIOTest extends DocumentUtilsTest{
      * checks whether the headline is found
      */
     @Test
-    public void hasHeadline() throws Exception{
+    public void hasHeadline() throws Exception {
         List<String> allStrings = getAllStrings(TEST_FILE);
         Assert.assertEquals(1, numberOfDeepChecks(allStrings, "Headline"));
     }
@@ -41,7 +41,7 @@ public class DocumentUtilsIOTest extends DocumentUtilsTest{
      * checks whether the tag is found
      */
     @Test
-    public void hasTag() throws Exception{
+    public void hasTag() throws Exception {
         List<String> allStrings = getAllStrings(TEST_FILE);
         Assert.assertEquals(1, numberOfDeepChecks(allStrings,
                 DocumentUtils.OPENING_TAG + "Tag" + DocumentUtils.CLOSING_TAG));
@@ -51,7 +51,7 @@ public class DocumentUtilsIOTest extends DocumentUtilsTest{
      * checks if a nonexisting word is not found
      */
     @Test
-    public void hasNotRubbish() throws Exception{
+    public void hasNotRubbish() throws Exception {
         List<String> allStrings = getAllStrings(TEST_FILE);
         Assert.assertEquals(0, numberOfDeepChecks(allStrings, "Rubbish"));
     }
@@ -60,7 +60,7 @@ public class DocumentUtilsIOTest extends DocumentUtilsTest{
      * checks whether writing works by reloading it after and comparing all words
      */
     @Test
-    public void writeFile() throws Exception{
+    public void writeFile() throws Exception {
         XWPFDocument oldTest = createDocument(TEST_FILE);
 
         String outFilePath = TEST_PATH + "HeadlineTest.docx";
