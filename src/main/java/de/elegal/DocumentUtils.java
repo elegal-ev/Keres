@@ -9,7 +9,7 @@ import java.util.*;
 
 
 /**
- * A helper class to not scare the noobies.
+ * A static helper class to not scare the noobies.
  * Basically just a wrapper around Apache POI for easier .docx editing.
  *
  * @author Lars Quentin, Valerius Mattfeld
@@ -24,6 +24,12 @@ public class DocumentUtils {
      * The Symbols which end an Tag.
      */
     public final static String CLOSING_TAG = ">";
+
+    /**
+     * A private constuctor since we don't want an instance of an static class.
+     */
+    private DocumentUtils() {
+    }
 
     /**
      * Static Method to open a File. Both relative and absolute Paths are allowed.
