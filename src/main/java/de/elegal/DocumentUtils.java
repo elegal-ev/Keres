@@ -89,20 +89,26 @@ public class DocumentUtils {
         Objects.requireNonNull(replace);
         int counter = 0;
 
-        // Here we just get the paragraphs and its runs
-        List<XWPFRun> runs = doc.getParagraphs()
+        for (XWPFRun run : getRunsFromDocument(doc)) {
+            if (replaceRun(run, tag, replace)) counter++;
+        }
+        return new Tuple<>(counter, doc);
+    }
+
+    /**
+     * Flattens the complicated XWPFDocumentStructure to extract its XWPFRuns. Does return references on the same
+     * objects instead of doing a deep copy.
+     * @param doc
+     * @return
+     */
+    private static List<XWPFRun> getRunsFromDocument(final XWPFDocument doc) {
+        return doc.getParagraphs()
                 .stream()
                 .map(XWPFParagraph::getRuns)
                 // getRuns returns null instead of empty lists
                 .filter(Objects::nonNull)
                 // This is just a flatmapping from List<List<XWPFRun>> to List<XWPFRun>
                 .collect(ArrayList::new, ArrayList::addAll, ArrayList::addAll);
-
-        // Here we actually process them
-        for (XWPFRun run : runs) {
-            if (replaceRun(run, tag, replace)) counter++;
-        }
-        return new Tuple<>(counter, doc);
     }
 
     /**
