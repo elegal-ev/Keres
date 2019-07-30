@@ -18,7 +18,6 @@ public class Calculator {
 
     // ob eine mahnung wirksam ist.
     // TODO add 196, 197, 651g, 548, 407ff., 864 BGB
-    // TODO add schaltjahre
     public static boolean isFristende(String today, String due) throws ParseException {
         LocalDate todayDate = LocalDate.parse(today);
         LocalDate dueDate = LocalDate.parse(due);
