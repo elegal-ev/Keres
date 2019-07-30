@@ -40,6 +40,8 @@ public class CalculatorTest {
             assertTrue(Calculator.isFristende(today, faellig));
             assertTrue(Calculator.isFristende(today, faellig2));
             assertTrue(Calculator.isFristende(today, faellig3));
+
+            assertFalse(Calculator.isFristende(vj));
         } catch (ParseException e) {
             e.printStackTrace();
             fail("test failed for fristende");
