@@ -1,17 +1,19 @@
 package de.elegal;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Client extends CSVHandle implements TagStrings {
-    private final List<String[]> rows;
+    private final Stack<String[]> rows;
     private final String[] header;
 
     public Client(String csvFilePath) throws IOException {
         super(csvFilePath);
-        this.rows = read();
-        this.header = this.rows.get(0);
+        List<String[]> tmpList = read();
+        Collections.reverse(tmpList);
+        this.rows = new Stack<>();
+        this.rows.addAll(tmpList);
+        this.header = this.rows.pop();
     }
 
     public static void main(String[] args) {
@@ -22,17 +24,14 @@ public class Client extends CSVHandle implements TagStrings {
             e.printStackTrace();
         }
         assert client != null;
-        for (String[] row :
-                client.getRows()) {
-            for (String s : row) {
-                System.out.print(s + " ");
-            }
-            System.out.println();
+        for (Map<String, String> m :
+                client.getSubstitutions()) {
+            System.out.println(m);
         }
     }
 
     public List<String[]> getRows() {
-        return rows;
+        return new ArrayList<>(rows);
     }
 
     public String[] getHeader() {
@@ -40,7 +39,16 @@ public class Client extends CSVHandle implements TagStrings {
     }
 
     @Override
-    public Map<String, String> getSubstitutions() {
-        return null;
+    public Map<String, String>[] getSubstitutions() {
+        Map[] result = new Map[this.rows.size()];
+        for (int i = 0; i <= this.rows.size() + 1; i++) {
+            String[] currentRow = this.rows.pop();
+            Map<String, String> tmpres = new HashMap<>();
+            for (int j = 0; j < currentRow.length; j++) {
+                tmpres.put(header[j], currentRow[j]);
+            }
+            result[i] = tmpres;
+        }
+        return result;
     }
 }

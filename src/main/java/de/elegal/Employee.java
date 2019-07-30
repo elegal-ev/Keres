@@ -9,7 +9,7 @@ public class Employee extends CSVHandle implements TagStrings {
     }
 
     @Override
-    public Map<String, String> getSubstitutions() {
+    public Map<String, String>[] getSubstitutions() {
         return null;
     }
 }

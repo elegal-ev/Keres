@@ -35,7 +35,7 @@ public class ClientTest {
 
     @Test
     public void getRows() {
-        int len = 4; // incl. header row.
+        int len = 3; // incl. header row.
 
         assertEquals(len, client.getRows().size());
 
@@ -46,14 +46,16 @@ public class ClientTest {
         String[] row2 = {"3", "Rechtsstudent", "R", "Herr", "Kanzlei Recht und Ordnung", "Backstreet", "25", "Potsdam",
                 "13371", "norm@kontrolle.de", "013/923", "Gyros Spezial", "11.99", "2019-11-23"};
 
-        assertArrayEquals(row0, client.getRows().get(1));
-        assertArrayEquals(row1, client.getRows().get(2));
-        assertArrayEquals(row2, client.getRows().get(3));
+        assertArrayEquals(row0, client.getRows().get(2));
+        assertArrayEquals(row1, client.getRows().get(1));
+        assertArrayEquals(row2, client.getRows().get(0));
     }
 
     @Test
     public void getSubstitutions() {
+        Map<String, String> actualMap = client.getSubstitutions()[0];
         Map<String, String> expectedMap = new HashMap<>();
+
         expectedMap.put("ID", "1");
         expectedMap.put("NAME", "Mustermann");
         expectedMap.put("VORNAME", "Max");
@@ -69,27 +71,6 @@ public class ClientTest {
         expectedMap.put("BETRAG", "324.11");
         expectedMap.put("DATUM", "2018-09-03");
 
-        assertSame();
-    }
-
-    @Test
-    public void getClients() {
-        Map<String, String> expectedMap = new HashMap<>();
-        expectedMap.put("ID", "1");
-        expectedMap.put("NAME", "Mustermann");
-        expectedMap.put("VORNAME", "Max");
-        expectedMap.put("ANREDE", "Herr");
-        expectedMap.put("FIRMA", "");
-        expectedMap.put("STRASSE", "Maxstr.");
-        expectedMap.put("NUMMER", "8a");
-        expectedMap.put("STADT", "Dortmund");
-        expectedMap.put("PLZ", "58239");
-        expectedMap.put("EMAIL", "max@muster.de");
-        expectedMap.put("FAX", "12931-241");
-        expectedMap.put("LEISTUNG", "Kauf von Nudelsuppen (1231)");
-        expectedMap.put("BETRAG", "324.11");
-        expectedMap.put("DATUM", "2018-09-03");
-
-        assertSame();
+        assertEquals(expectedMap, actualMap);
     }
 }
