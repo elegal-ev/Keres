@@ -4,11 +4,14 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
+/**
+ * The abstract document class to derive from
+ *
+ * @author Valerius Mattfeld, Lars Quentin
+ */
 public abstract class Document {
     /**
      * The Apache POI internal docx Object
@@ -18,7 +21,7 @@ public abstract class Document {
     /**
      * The file path
      */
-    protected String path;  // filepath
+    protected String path;
 
     /**
      * Set of all possible tags for a given document
@@ -33,17 +36,19 @@ public abstract class Document {
 
     /**
      * The protected Contructor. Since Document is abstract it is just derivable.
+     *
      * @param path the file path
      * @param tags all tags which should be replaced
      */
     protected Document(final String path, final Collection<String> tags)
-            throws IOException, InvalidFormatException, NullPointerException {
+            throws IOException, InvalidFormatException, NullPointerException, IllegalArgumentException {
         Objects.requireNonNull(tags);
         this.allTags = new HashSet<>(tags);
         this.tagsStillExisting = new HashSet<>(tags);
 
         this.path = path;
         createDocument();
+        validateTags();
     }
 
     /**
@@ -62,6 +67,27 @@ public abstract class Document {
             System.err.println("A problem occured while parsing the Word-Document");
             throw ex;
         }
+    }
+
+    /**
+     * Proper tag verification.
+     * If there are any tags in the word document, which were not given by the constructor, its invalid.
+     * Vice versa, if there are any tags given by the constructor which are not in the word document, we just remove them
+     * from the list of possible replaces.
+     *
+     * @throws IllegalArgumentException if there are unsatisfied tags in the word document
+     */
+    private void validateTags() throws IllegalArgumentException {
+        final Set<String> allDocumentTags = DocumentUtils.getAllTags(this.doc);
+
+        // At first, we have to check whether all document tasks are given via the constructor
+        if (!this.allTags.containsAll(allDocumentTags))
+            throw new IllegalArgumentException("Not all Document tasks are provided by the constructor");
+
+        // Then we filter out those who are given by the constructor but not in the document
+        // The iterator is needed otherwise we could get concurrentmodificationexceptions
+        // by removing on the object itself
+        this.allTags.removeIf(s -> !allDocumentTags.contains(s));
     }
 
     /**
