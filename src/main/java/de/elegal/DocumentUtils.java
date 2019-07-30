@@ -34,11 +34,12 @@ public class DocumentUtils {
     /**
      * Static Method to open a File. Both relative and absolute Paths are allowed.
      * Java looks from the current working directory, not the .class location.
+     *
      * @param str The Path to the docx
      * @return A Apache POI Representation of the Word Document
-     * @throws NullPointerException If either the given path is null or Apache POI returned null while opening and parsing the file. For further information see getMessage().
+     * @throws NullPointerException   If either the given path is null or Apache POI returned null while opening and parsing the file. For further information see getMessage().
      * @throws InvalidFormatException If the Path is malformatted
-     * @throws IOException If IO problems occur while parsing the File
+     * @throws IOException            If IO problems occur while parsing the File
      */
     public static XWPFDocument openFile(final String str) throws NullPointerException, InvalidFormatException, IOException {
         Objects.requireNonNull(str);
@@ -52,10 +53,11 @@ public class DocumentUtils {
 
     /**
      * Static Method to write a file. Overwrites by default.
+     *
      * @param doc The POI Word Object
      * @param str The Path to save it as
      * @throws NullPointerException If any of the arguments are null
-     * @throws IOException If IO problems occur while saving the File
+     * @throws IOException          If IO problems occur while saving the File
      */
     public static void writeFile(final XWPFDocument doc, final String str) throws NullPointerException, IOException {
         Objects.requireNonNull(doc);
@@ -65,8 +67,9 @@ public class DocumentUtils {
 
     /**
      * A wrapper to {@link #replaceAllStrings} but with tags around the string.
-     * @param doc The POI Word object
-     * @param tag The String to look for within Tags
+     *
+     * @param doc     The POI Word object
+     * @param tag     The String to look for within Tags
      * @param replace The String to replace it with
      * @return A Tuple of the Number of Replacements as well as the new Document, since the Object itself has changed,
      * not the saved document. See {@link #writeFile} for that.
@@ -78,12 +81,14 @@ public class DocumentUtils {
 
     // Not working with tables
     // If needed, should look sth like that https://stackoverflow.com/a/22269035
+
     /**
      * A Function to replace all occurrences of the wanted String, even if it isn't within a tag.
      * Therefore, if that's needed, use {@link #replaceAllTags} instead.
      * Does not work on Tables.
-     * @param doc The POI Word object
-     * @param tag The String to look for within Tags
+     *
+     * @param doc     The POI Word object
+     * @param tag     The String to look for within Tags
      * @param replace The String to replace it with
      * @return A Tuple of the Number of Replacements as well as the new Document, since the Object itself has changed,
      * not the saved document. See {@link #writeFile} for that.
@@ -104,8 +109,9 @@ public class DocumentUtils {
     /**
      * Flattens the complicated XWPFDocumentStructure to extract its XWPFRuns. Does return references on the same
      * objects instead of doing a deep copy.
-     * @param doc
-     * @return
+     *
+     * @param doc the apache doc parsed template file
+     * @return List of all possible strings from the document
      */
     private static List<XWPFRun> getRunsFromDocument(final XWPFDocument doc) {
         return doc.getParagraphs()
@@ -119,8 +125,9 @@ public class DocumentUtils {
 
     /**
      * The Function which actually processes all Tags by just searching for the given term and if existing replaces it.
-     * @param run The current run to potentially replace in
-     * @param tag The String to look for within Tags
+     *
+     * @param run     The current run to potentially replace in
+     * @param tag     The String to look for within Tags
      * @param replace The String to replace it with
      * @return Whether it has replaced anything. The actual value gets changed by reference.
      */
