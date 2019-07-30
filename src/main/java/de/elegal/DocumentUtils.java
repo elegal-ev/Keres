@@ -2,10 +2,16 @@ package de.elegal;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.xwpf.usermodel.*;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -44,10 +50,12 @@ public class DocumentUtils {
     public static XWPFDocument openFile(final String str) throws NullPointerException, InvalidFormatException, IOException {
         Objects.requireNonNull(str);
         File file = new File(str);
-        OPCPackage opcPackage = OPCPackage.open(file);
+        OPCPackage opcPackage = OPCPackage.open(file);  // File -> "Apache-Doc-Wrapper"
         Objects.requireNonNull(opcPackage, "Something went wrong opening " + str);
+
         XWPFDocument document = new XWPFDocument(opcPackage);
         Objects.requireNonNull(document, "Something went wrong parsing " + str);
+
         return document;
     }
 
@@ -100,9 +108,9 @@ public class DocumentUtils {
         Objects.requireNonNull(replace);
         int counter = 0;
 
-        for (XWPFRun run : getRunsFromDocument(doc)) {
+        for (XWPFRun run : getRunsFromDocument(doc))
             if (replaceRun(run, tag, replace)) counter++;
-        }
+
         return new Tuple<>(counter, doc);
     }
 
