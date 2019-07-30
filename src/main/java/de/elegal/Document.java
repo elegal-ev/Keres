@@ -65,9 +65,11 @@ public abstract class Document {
      *
      * @param tag    the tag
      * @param string the string
+     * @return whether its actually replaced or not.
      */
-    public void replace(String tag, String string) {
-        DocumentUtils.replaceAllTags(doc, tag, string);
+    public boolean replace(String tag, String string) {
+        Tuple<Integer, XWPFDocument> ret = DocumentUtils.replaceAllTags(doc, tag, string);
+        return ret.getFirst() != 0;
     }
 
     /**
