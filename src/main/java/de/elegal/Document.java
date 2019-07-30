@@ -10,25 +10,34 @@ import java.util.HashSet;
 import java.util.Objects;
 
 public abstract class Document {
-    private XWPFDocument doc;
+    private XWPFDocument doc;  // internal apache doc
 
-    protected String path;
-    protected HashSet<String> allVariables;
-    protected HashSet<String> variablesStillExisting;
+    protected String path;  // filepath
+    protected HashSet<String> allTags;  // set of all tags, which are substituted in the final document
+    protected HashSet<String> tagsStillExisting;  // set of all existing tags, which should be 0 for the final document
 
-    protected Document(final String path, final Collection<String> variables)
+    /*
+    abstact constructor
+     */
+    protected Document(final String path, final Collection<String> tags)
             throws IOException, InvalidFormatException, NullPointerException {
-        Objects.requireNonNull(variables);
-        this.allVariables = new HashSet<>(variables);
-        this.variablesStillExisting = new HashSet<>(variables);
+        Objects.requireNonNull(tags);
+        this.allTags = new HashSet<>(tags);
+        this.tagsStillExisting = new HashSet<>(tags);
 
         this.path = path;
         createDocument();
     }
 
+    /**
+     * creates an apache doc from a given string.
+     *
+     * @throws IOException            ex {@link IOException}
+     * @throws InvalidFormatException ex {@link InvalidFormatException}
+     */
     private void createDocument() throws IOException, InvalidFormatException {
         try {
-            this.doc = DocumentUtils.openFile(path);
+            this.doc = DocumentUtils.openFile(path);  // creates an apache doc at the given path
         } catch (InvalidFormatException | NullPointerException ex) {
             System.err.println("The given path was invalid");
             throw ex;
@@ -38,6 +47,11 @@ public abstract class Document {
         }
     }
 
+    /**
+     * saves a file at the very end on a given path. Can be called at any given time.
+     *
+     * @param path destination path
+     */
     public void saveFile(final String path) {
         try {
             DocumentUtils.writeFile(doc, path);
@@ -46,19 +60,42 @@ public abstract class Document {
         }
     }
 
+    /**
+     * Replaces the tag with the substitution.
+     *
+     * @param tag    the tag
+     * @param string the string
+     */
     public void replace(String tag, String string) {
         DocumentUtils.replaceAllTags(doc, tag, string);
     }
 
+    /**
+     * checks if a substitution is applied to the document
+     *
+     * @param string the substitution
+     * @return whether its applied or not.
+     */
     public boolean isReplaceable(String string) {
-        return this.variablesStillExisting.contains(string);
+        // FIXME document check
+        return this.tagsStillExisting.contains(string);
     }
 
-    public ArrayList<String> getAllVariables() {
-        return new ArrayList<>(this.allVariables);
+    /**
+     * All possible tags, even if they are processed
+     *
+     * @return possible tags
+     */
+    public ArrayList<String> getAllTags() {
+        return new ArrayList<>(this.allTags);
     }
 
-    public ArrayList<String> getExistingVariables() {
-        return new ArrayList<>(this.variablesStillExisting);
+    /**
+     * All tags that are not yet parsed.
+     *
+     * @return not applied tags.
+     */
+    public ArrayList<String> getExistingtags() {
+        return new ArrayList<>(this.tagsStillExisting);
     }
 }
