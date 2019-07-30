@@ -1,10 +1,8 @@
 package de.elegal;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.Period;
+import java.time.temporal.ChronoUnit;
 
 // Fristen und Zinsberechnung
 public class Calculator {
@@ -19,11 +17,17 @@ public class Calculator {
     }
 
     // ob eine mahnung wirksam ist.
-    public static boolean isFristende(String faelligkeitsdatum, String datum) throws ParseException {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Period period = Period.between(LocalDate.parse(datum), LocalDate.parse(faelligkeitsdatum));
-        int timeDelta = period.getDays();
+    // TODO add 196, 197, 651g, 548, 407ff., 864 BGB
+    // TODO add schaltjahre
+    public static boolean isFristende(String today, String due) throws ParseException {
+        LocalDate todayDate = LocalDate.parse(today);
+        LocalDate dueDate = LocalDate.parse(due);
 
-        return timeDelta >= 900; // fixme hard!
+        // Ultimoregelung, 199 I 1. HS BGB
+        LocalDate lastDay = LocalDate.parse(dueDate.getYear() + "-12-31");
+        long timeDelta = ChronoUnit.DAYS.between(todayDate, lastDay);  // getting days between due and today's date
+
+        if (timeDelta <= -1095) return false; // after 3 years
+        else return dueDate.isBefore(todayDate) || dueDate.equals(todayDate);
     }
 }
