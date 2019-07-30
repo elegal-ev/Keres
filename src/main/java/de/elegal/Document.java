@@ -46,8 +46,9 @@ public abstract class Document {
         }
     }
 
-    public void replace(String tag, String string) {
-        DocumentUtils.replaceAllTags(doc, tag, string);
+    public boolean replace(String tag, String string) {
+        Tuple<Integer, XWPFDocument> ret = DocumentUtils.replaceAllTags(doc, tag, string);
+        return ret.getFirst() != 0;
     }
 
     public boolean isReplaceable(String string) {
