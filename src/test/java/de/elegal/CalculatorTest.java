@@ -10,11 +10,9 @@ public class CalculatorTest {
     @Test
     public void verzugszins() {
         // FIXME adding exception handling for negative input
-        // todo more testing
-        // yeah... test fails on a logical level..
         // 5% p.a.
         double x = Calculator.verzugszins(900, 200);
-        assertTrue(x > 900);
+        assertTrue(900 + x > 900);
     }
 
     @Test

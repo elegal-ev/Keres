@@ -11,10 +11,11 @@ public class Calculator {
     private Calculator() {
     }
 
-    // 5 % p.a.
-    public static double verzugszins(double betrag, int tage) {
-        double factor = ((double) tage) / 365; // TODO schaltjahr
-        return betrag + (betrag * 1.05) * factor;
+    // 5 % p.a. nach dt. Methode
+    public static double verzugszins(double betrag, int tage) throws IllegalAccessException {
+        if (betrag < 0) throw new IllegalArgumentException("Negativer Betrag!");
+        if (tage < 0) throw new IllegalAccessException("Negative Tagesdifferenz!");
+        return (betrag * 5 * tage) / (100 * 360);
     }
 
     // ob eine mahnung wirksam ist.
