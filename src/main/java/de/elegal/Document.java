@@ -10,14 +10,31 @@ import java.util.HashSet;
 import java.util.Objects;
 
 public abstract class Document {
-    private XWPFDocument doc;  // internal apache doc
+    /**
+     * The Apache POI internal docx Object
+     */
+    private XWPFDocument doc;
 
+    /**
+     * The file path
+     */
     protected String path;  // filepath
-    protected HashSet<String> allTags;  // set of all tags, which are substituted in the final document
-    protected HashSet<String> tagsStillExisting;  // set of all existing tags, which should be 0 for the final document
 
-    /*
-    abstact constructor
+    /**
+     * Set of all possible tags for a given document
+     */
+    protected HashSet<String> allTags;
+
+    /**
+     * Set of all tags which are not substituted.
+     * This should be 0 when the document is finished
+     */
+    protected HashSet<String> tagsStillExisting;
+
+    /**
+     * The protected Contructor. Since Document is abstract it is just derivable.
+     * @param path the file path
+     * @param tags all tags which should be replaced
      */
     protected Document(final String path, final Collection<String> tags)
             throws IOException, InvalidFormatException, NullPointerException {
