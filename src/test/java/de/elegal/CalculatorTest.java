@@ -7,16 +7,25 @@ import java.text.ParseException;
 import static org.junit.Assert.*;
 
 public class CalculatorTest {
+    @Test(expected = NumberFormatException.class)
+    public void verzugszinsNumberFromatExceptionBetrag() {
+        Calculator.verzugszins(-1, 1);
+    }
+
+    @Test(expected = NumberFormatException.class)
+    public void verzugszinsNumberFromatExceptionTage() {
+        Calculator.verzugszins(1, -1);
+    }
+
     @Test
     public void verzugszins() {
-        // FIXME adding exception handling for negative input
         // 5% p.a.
         double zins = 0;
         int days = 200;
         double schuld = 900;
         try {
             zins = Calculator.verzugszins(schuld, days);
-        } catch (IllegalAccessException e) {
+        } catch (NumberFormatException e) {
             e.printStackTrace();
             fail("Negative inputs provided!");
         }

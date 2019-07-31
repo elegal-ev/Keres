@@ -10,9 +10,9 @@ public class Calculator {
     }
 
     // 5 % p.a. nach dt. Methode
-    public static double verzugszins(double betrag, int tage) throws IllegalAccessException {
-        if (betrag < 0) throw new IllegalArgumentException("Negativer Betrag!");
-        if (tage < 0) throw new IllegalAccessException("Negative Tagesdifferenz!");
+    public static double verzugszins(double betrag, int tage) throws NumberFormatException {
+        if (betrag < 0) throw new NumberFormatException("Negativer Betrag!");
+        if (tage < 0) throw new NumberFormatException("Negative Tagesdifferenz!");
         return (betrag * 5 * tage) / (100 * 360);
     }
 
