@@ -1,5 +1,6 @@
-package de.elegal;
+package de.elegal.Utils;
 
+import de.elegal.Utils.Tuple;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;

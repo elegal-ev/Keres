@@ -1,11 +1,12 @@
 package de.elegal;
 
+import de.elegal.Utils.DocumentUtils;
+import de.elegal.Utils.Tuple;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * The abstract document class to derive from

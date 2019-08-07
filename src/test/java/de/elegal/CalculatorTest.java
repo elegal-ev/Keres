@@ -1,5 +1,6 @@
 package de.elegal;
 
+import de.elegal.Utils.Calculator;
 import org.junit.Test;
 
 import java.text.ParseException;

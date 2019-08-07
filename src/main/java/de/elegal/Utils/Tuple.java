@@ -1,4 +1,4 @@
-package de.elegal;
+package de.elegal.Utils;
 
 import java.util.Objects;
 
