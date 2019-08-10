@@ -1,6 +1,6 @@
 # Keres [![Build Status](https://travis-ci.org/elegal-ev/Keres.svg?branch=master)](https://travis-ci.org/elegal-ev/Keres)
 
-A library for automatic generation of cease and desist 🗎 based on docx templates
+A library for automatic generation of cease and desist :email: based on docx templates written in :coffee:
 
 ## Getting Started
 
