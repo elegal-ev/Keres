@@ -83,7 +83,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) as well as our [Code of Conduct](CODE_OF_
 
 Up to this point, this is basically a project of just the two of us
 
-* **Valerius Ma** - [valerius21](https://github.com/valerius21)
+* **Valerius Mattfeld** - [valerius21](https://github.com/valerius21)
 * **Lars Quentin** - [lquenti](https://github.com/lquenti)
 
 <a name="license"/>
@@ -103,4 +103,4 @@ This project is licensed under the GPL3 - see the [LICENSE](LICENSE) file for de
 
 ## Copyright
 
-Valerius Ma, Lars Quentin 2019
+Valerius Mattfeld, Lars Quentin 2019
