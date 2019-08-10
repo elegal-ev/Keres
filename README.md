@@ -30,11 +30,11 @@ Keres is still active in development, therefore we don't have a maven central re
 
 You basically just need an new jdk, we just support jdk11+
 
-Ubuntu:
+![](https://i.ibb.co/PzqHy6K/Ubuntu.png) Ubuntu:
 ```
 root# apt-get update && apt-get install openjdk-11-jdk
 ```
-Windows: (with choco and a admin shell)
+![](https://i.ibb.co/6DJYKVD/Windows.png) Windows: (with choco and a admin shell)
 ```
 choco install openjdk --version 11.0
 ```
