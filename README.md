@@ -1,4 +1,4 @@
-# Keres 
+# Keres [![Build Status](https://travis-ci.org/elegal-ev/Keres.svg?branch=master)](https://travis-ci.org/elegal-ev/Keres)
 
 A library for automatic generation of cease and desist 🗎 based on docx templates
 
