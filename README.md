@@ -32,9 +32,9 @@ You basically just need an new jdk, we just support jdk11+
 
 Ubuntu:
 ```
-apt-get update && apt-get install openjdk-11-jdk
+root# apt-get update && apt-get install openjdk-11-jdk
 ```
-Windows: (with choco)
+Windows: (with choco and a admin shell)
 ```
 choco install openjdk --version 11.0
 ```
@@ -47,7 +47,7 @@ Clone the repository
 ```
 git clone https://github.com/elegal-ev/Keres.git
 ```
-Build it (here for linux, gradlew.bat for windows)
+Build it (here for linux, `gradlew.bat` for windows)
 ```
 ./gradlew jar
 ```
