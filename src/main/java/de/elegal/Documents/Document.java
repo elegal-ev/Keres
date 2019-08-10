@@ -1,4 +1,4 @@
-package de.elegal;
+package de.elegal.Documents;
 
 import de.elegal.Utils.DocumentUtils;
 import de.elegal.Utils.Tuple;
