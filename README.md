@@ -25,7 +25,8 @@ A library for automatic generation of cease and desist :email: based on docx tem
 Keres is still active in development, therefore we don't have a maven central repository.
 
 #### Making CSVs from Excel
-[![excel to csv convertion](excel_csv.gif)]()
+[![excel to csv convertion](excel_csv.gif)](https://github.com/elegal-ev/Keres)
+
 <a name="prerequisites-for-development-build"/>
 
 ### Prerequisites for development build
