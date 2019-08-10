@@ -1,5 +1,6 @@
 package de.elegal;
 
+import de.elegal.Utils.DocumentUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.junit.Assert;
 import org.junit.Test;
