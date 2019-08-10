@@ -73,6 +73,9 @@ which is basically a wrapper around `./gradlew test` with a few more checks see 
 
 <a name="contributing"/>
 
+### Making CSVs from Excel
+[![excel to csv convertion](excel_csv.gif)](https://github.com/elegal-ev/Keres)
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) as well as our [Code of Conduct](CODE_OF_CONDUCT.md)
