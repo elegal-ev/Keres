@@ -1,147 +1,135 @@
 package de.elegal.Documents;
 
-import de.elegal.Utils.DocumentUtils;
-import de.elegal.Utils.Tuple;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.io.IOException;
 import java.util.*;
 
 /**
- * The abstract document class to derive from
- *
- * @author Valerius Mattfeld, Lars Quentin
+ * The base class for all document types.
  */
 public abstract class Document {
-    /**
-     * The Apache POI internal docx Object
-     */
-    private XWPFDocument doc;
 
     /**
-     * The file path
-     */
-    protected String path;
-
-    /**
-     * Set of all possible tags for a given document
-     */
-    protected HashSet<String> allTags;
-
-    /**
-     * Set of all tags which are not substituted.
-     * This should be 0 when the document is finished
-     */
-    protected HashSet<String> tagsStillExisting;
-
-    /**
-     * The protected Contructor. Since Document is abstract it is just derivable.
+     * An abstract method for opening a File.
      *
-     * @param path the file path
-     * @param tags all tags which should be replaced
+     * @param path The path (can be both relative and absolute) to the document
+     * @throws InvalidFormatException If the string is malformatted
+     * @throws IOException            When some problems with the file system occur (like file locks or alike)
      */
-    protected Document(final String path, final Collection<String> tags)
-            throws IOException, InvalidFormatException, NullPointerException, IllegalArgumentException {
-        Objects.requireNonNull(tags);
-        this.allTags = new HashSet<>(tags);
-        this.tagsStillExisting = new HashSet<>(tags);
+    protected abstract void openFile(String path) throws InvalidFormatException, IOException;
 
-        this.path = path;
-        createDocument();
-        validateTags();
+    /**
+     * An abstract method for closing the file.
+     *
+     * @param path The path (can be both relative and absolute) where the document should be saved
+     * @throws IOException When some problems with the file system occur (like file locks or alike)
+     */
+    public abstract void saveAndCloseFile(String path) throws IOException;
+
+    /**
+     * Closing the file access without saving
+     *
+     * @throws IOException When some problems with the file system occur (like file locks or alike)
+     */
+    public abstract void closeWithoutSaving() throws IOException;
+
+    /**
+     * The replace Function for a tag.
+     *
+     * @param oldString the old string
+     * @param newString the new string
+     * @return the number of replacements
+     */
+    public int replaceTag(final String oldString, final String newString) {
+        return replaceString(stringToTag(oldString), newString);
     }
 
     /**
-     * creates an apache doc from a given string.
+     * Internal method for replaceTag to replace Strings
      *
-     * @throws IOException            ex {@link IOException}
-     * @throws InvalidFormatException ex {@link InvalidFormatException}
+     * @param oldString the old string
+     * @param newString the new sting
+     * @return the number of repalcements
      */
-    private void createDocument() throws IOException, InvalidFormatException {
-        try {
-            this.doc = DocumentUtils.openFile(path);  // creates an apache doc at the given path
-        } catch (InvalidFormatException | NullPointerException ex) {
-            System.err.println("The given path was invalid");
-            throw ex;
-        } catch (IOException ex) {
-            System.err.println("A problem occured while parsing the Word-Document");
-            throw ex;
+    protected abstract int replaceString(final String oldString, final String newString);
+
+    /**
+     * an internal method to replace multiple strings
+     *
+     * @param replacements a map of repalcements
+     * @return A map of the strings and the number it was replaced
+     * @throws IllegalArgumentException If any value is null when the key isnt
+     */
+    protected Map<String, Integer> replaceAllStrings(final Map<String, String> replacements) throws IllegalArgumentException {
+        Objects.requireNonNull(replacements);
+        boolean invalidReplacements = replacements.entrySet().stream().anyMatch(
+                x -> (x.getKey() != null && x.getValue() == null)
+        );
+        if (invalidReplacements) {
+            throw new IllegalArgumentException("Values can't be null if Keys are not null");
         }
-    }
-
-    /**
-     * Proper tag verification.
-     * If there are any tags in the word document, which were not given by the constructor, its invalid.
-     * Vice versa, if there are any tags given by the constructor which are not in the word document, we just remove them
-     * from the list of possible replaces.
-     *
-     * @throws IllegalArgumentException if there are unsatisfied tags in the word document
-     */
-    private void validateTags() throws IllegalArgumentException {
-        final Set<String> allDocumentTags = DocumentUtils.getAllTags(this.doc);
-
-        // At first, we have to check whether all document tasks are given via the constructor
-        if (!this.allTags.containsAll(allDocumentTags))
-            throw new IllegalArgumentException("Not all Document tasks are provided by the constructor");
-
-        // Then we filter out those who are given by the constructor but not in the document
-        // The iterator is needed otherwise we could get concurrentmodificationexceptions
-        // by removing on the object itself
-        this.allTags.removeIf(s -> !allDocumentTags.contains(s));
-    }
-
-    /**
-     * saves a file at the very end on a given path. Can be called at any given time.
-     *
-     * @param path destination path
-     */
-    public void saveFile(final String path) {
-        try {
-            DocumentUtils.writeFile(doc, path);
-        } catch (IOException ex) {
-            System.err.println("An problem occured while saving the word document");
+        HashMap<String, Integer> res = new HashMap<>();
+        for (Map.Entry<String, String> replacement : replacements.entrySet()) {
+            res.put(replacement.getKey(),
+                    replaceString(replacement.getKey(), replacement.getValue()));
         }
+        return res;
     }
 
     /**
-     * Replaces the tag with the substitution.
+     * A function to replace multiple tags
      *
-     * @param tag    the tag
-     * @param string the string
-     * @return whether its actually replaced or not.
+     * @param replacements a map of replacements
+     * @return A map of the strings and the number it was replaced
+     * @throws IllegalArgumentException If any value is null when the key isnt
      */
-    public boolean replace(String tag, String string) {
-        Tuple<Integer, XWPFDocument> ret = DocumentUtils.replaceAllTags(doc, tag, string);
-        return ret.getFirst() != 0;
+    public Map<String, Integer> replaceAllTags(final Map<String, String> replacements) throws IllegalArgumentException {
+        Objects.requireNonNull(replacements);
+        Map<String, String> replacementTags = new HashMap<>();
+        for (Map.Entry<String, String> replacement : replacements.entrySet()) {
+            replacementTags.put(stringToTag(replacement.getKey()), replacement.getValue());
+        }
+        return replaceAllStrings(replacementTags);
     }
 
     /**
-     * checks if a substitution is applied to the document
+     * A helper method to convert a string to a tag
      *
-     * @param string the substitution
-     * @return whether its applied or not.
+     * @param str The nontaggy string
+     * @return The taggy string
      */
-    public boolean isReplaceable(String string) {
-        // FIXME document check
-        return this.tagsStillExisting.contains(string);
+    protected String stringToTag(final String str) {
+        Objects.requireNonNull(str);
+        return getOpeningTag() + str + getClosingTag();
     }
 
-    /**
-     * All possible tags, even if they are processed
-     *
-     * @return possible tags
-     */
-    public ArrayList<String> getAllTags() {
-        return new ArrayList<>(this.allTags);
-    }
 
     /**
-     * All tags that are not yet parsed.
+     * A getter for the opening tag
      *
-     * @return not applied tags.
+     * @return the opening tag
      */
-    public ArrayList<String> getExistingtags() {
-        return new ArrayList<>(this.tagsStillExisting);
-    }
+    public abstract String getOpeningTag();
+
+    /**
+     * A getter for the closing tag
+     *
+     * @return the closing tag
+     */
+    public abstract String getClosingTag();
+
+    /**
+     * Extracts all Tags from the document
+     *
+     * @return A set of tags
+     */
+    public abstract Set<String> getTags();
+
+    /**
+     * Extracts the text from a document
+     *
+     * @return the Text
+     */
+    public abstract String getText();
 }
