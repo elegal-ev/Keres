@@ -22,7 +22,6 @@ class Replacer {
     int replace(XWPFDocument document) {
         Objects.requireNonNull(document);
         document.getParagraphs().forEach(this::replace);
-        System.out.println(numberOfReplacementsDone);
         return numberOfReplacementsDone; // TODO: Reset
     }
 

@@ -22,10 +22,7 @@ public class WordDocument extends Document{
         this.existingTags = findInitialTags();
     }
 
-    public WordDocument(String path, Collection<String> tags) throws InvalidFormatException, IOException{
-        this(path);
-        // TODO: Checking here
-    }
+    // TODO: Validation
 
     @Override
     protected void openFile(String path) throws InvalidFormatException, IOException {
