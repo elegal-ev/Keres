@@ -139,8 +139,9 @@ public class WordDocumentTests {
         WordDocument wordDocument = new WordDocument(REGEX_FILE);
         String replacedWith = "New Text!";
         Assert.assertFalse(wordDocument.getText().contains(replacedWith));
-        wordDocument.replaceTag("Tag1", replacedWith);
+        int numberOfReplacements = wordDocument.replaceTag("Tag1", replacedWith);
         Assert.assertTrue(wordDocument.getText().contains(replacedWith));
+        Assert.assertEquals(1, numberOfReplacements);
         wordDocument.closeWithoutSaving();
     }
     @Test
@@ -148,8 +149,9 @@ public class WordDocumentTests {
         WordDocument wordDocument = new WordDocument(REGEX_FILE);
         String replacedWith = "New Text!";
         Assert.assertFalse(wordDocument.getText().contains(replacedWith));
-        wordDocument.replaceTag("TagInNewLine", replacedWith);
+        int numberOfReplacements = wordDocument.replaceTag("TagInNewLine", replacedWith);
         Assert.assertTrue(wordDocument.getText().contains(replacedWith));
+        Assert.assertEquals(1, numberOfReplacements);
         wordDocument.closeWithoutSaving();
 
     }
@@ -158,14 +160,26 @@ public class WordDocumentTests {
         WordDocument wordDocument = new WordDocument(REGEX_FILE);
         String replacedWith = "New Text!";
         Assert.assertFalse(wordDocument.getText().contains(replacedWith));
-        wordDocument.replaceTag("Tag with spaces", replacedWith);
+        int numberOfReplacements = wordDocument.replaceTag("Tag with spaces", replacedWith);
         Assert.assertTrue(wordDocument.getText().contains(replacedWith));
+        Assert.assertEquals(1, numberOfReplacements);
         wordDocument.closeWithoutSaving();
     }
     @Test
-    public void replaceTagNotExisting() throws Exception{}
+    public void replaceTagNotExisting() throws Exception{
+        WordDocument wordDocument = new WordDocument(REGEX_FILE);
+        String notExisting = "Asdf";
+        Assert.assertFalse(wordDocument.getText().contains(notExisting));
+        int numberOfReplacements = wordDocument.replaceTag(notExisting, notExisting);
+        Assert.assertFalse(wordDocument.getText().contains(notExisting));
+        Assert.assertEquals(0, numberOfReplacements);
+    }
     // TODO: Some null check tests
     // TODO: Write a lot of test cases whether the run splitting is fucked up
     // TODO: Check for wrong written stuff
     // TODO: Also with a lot of extra formatting stuff
+    // TODO: Add number of replacements in tests
+    // TODO: Multiple replacements of the same tag
+    // TODO: Write one large nice test file
+    // TODO: Next page replacement and tags existing in general
 }

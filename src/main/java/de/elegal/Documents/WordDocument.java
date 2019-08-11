@@ -82,13 +82,16 @@ public class WordDocument extends Document{
          *   </w:r>
          * </w:p>
          * Therefore, __if__ it really exists, we have to do an expensive lookup over multiple runs.
+         * Also, we theoretically could work on paragraphs only, but that would destroy any kind
+         * of formatting within the paragraph.
+         * Thats because "spellStart" is not the only type a run can have and setting the text for a paragraph
+         * would loose all those Attributes.
+         * See https://stackoverflow.com/a/25186678 for further informations.
          */
         if (!getText().contains(string)) return 0;
 
-        int counter = 0;
-        for (XWPFRun run : getRuns())
-            if (replaceRun(run, string, replace)) counter++;
-        return counter;
+        Replacer replacer = new Replacer(string, replace);
+        return replacer.replace(this.doc);
     }
 
     @Override
@@ -108,8 +111,9 @@ public class WordDocument extends Document{
 
     @Override
     public String getText() {
-        return getRuns().stream()
-                .map(x -> x.getText(0))
+        return this.doc.getParagraphs()
+                .stream()
+                .map(XWPFParagraph::getText)
                 .collect(Collectors.joining());
     }
 
@@ -123,25 +127,5 @@ public class WordDocument extends Document{
             allTags.add(str.substring(1,str.length()-1));
         }
         return allTags;
-    }
-
-    private List<XWPFRun> getRuns() {
-        return this.doc.getParagraphs()
-                .stream()
-                .map(XWPFParagraph::getRuns)
-                // getRuns returns null instead of empty lists
-                .filter(Objects::nonNull)
-                // This is just a flatmapping from List<List<XWPFRun>> to List<XWPFRun>
-                .collect(ArrayList::new, ArrayList::addAll, ArrayList::addAll);
-    }
-
-    private static boolean replaceRun(XWPFRun run, final String tag, final String replace) {
-        if (run == null || tag == null || replace == null) return false;
-        String text = run.getText(0);
-        System.out.println(text);
-        if (text == null || !text.contains(tag)) return false;
-        text = text.replace(tag, replace);
-        run.setText(text, 0);
-        return true;
     }
 }
