@@ -11,6 +11,7 @@ public abstract class Document {
     // TODO: Write Rules for how it should be specified
     protected abstract void openFile(String path) throws InvalidFormatException, IOException;
     public abstract void saveAndCloseFile(String path) throws IOException;
+    public abstract void closeWithoutSaving() throws IOException;
 
     public int replaceTag(final String oldString, final String newString) {
         return replaceString(stringToTag(oldString), newString);

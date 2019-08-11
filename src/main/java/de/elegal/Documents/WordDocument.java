@@ -2,21 +2,16 @@ package de.elegal.Documents;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 import java.util.stream.Collectors;
 
 public class WordDocument extends Document{
-    private final static String OPENING_TAG = "<";
-    private final static String CLOSING_TAG = ">";
+    public final static String OPENING_TAG = "<";
+    public final static String CLOSING_TAG = ">";
 
     private XWPFDocument doc;
     private HashSet<String> existingTags;
@@ -41,16 +36,24 @@ public class WordDocument extends Document{
 
         this.doc = new XWPFDocument(opcPackage);
         Objects.requireNonNull(doc, "Something went wrong parsing" + path);
-
-
-        this.doc.close();
-        opcPackage.close(); // Maybe not even needed
     }
 
     @Override
     public void saveAndCloseFile(String path) throws IOException {
         Objects.requireNonNull(path);
-        this.doc.write(new FileOutputStream(path));
+        if (new File(path).exists()) {
+            throw new IllegalArgumentException("File already existing.");
+        }
+        FileOutputStream fileOutputStream = new FileOutputStream(path);
+        this.doc.write(fileOutputStream);
+        fileOutputStream.flush();
+        fileOutputStream.close();
+        this.doc.close();
+    }
+
+    @Override
+    public void closeWithoutSaving() throws IOException{
+        this.doc.close();
     }
 
     @Override
@@ -58,6 +61,30 @@ public class WordDocument extends Document{
         // If the tag is null, we just accept it and obviously do 0 replacements
         if (string == null) return 0;
         Objects.requireNonNull(replace);
+
+        /*
+         * The following Line is needed because of docx internals. Best explained by an example:
+         * For example, we have the String "<TagInNewLine>" somewhere in our document.
+         * Normally, this should be within one run, because there is no reason not to.
+         * At least, if you are not completely Word-Developer insane.
+         * But, since "TagInNewLine" is not a real word, it's splitted in
+         * <w:p w:rsidR="00240200" w:rsidRDefault="00240200">
+         *   <w:r>
+         *     <w:t>&lt;</w:t>
+         *   </w:r>
+         *   <w:proofErr w:type="spellStart"/>
+         *   <w:r>
+         *       <w:t>TagInNewLine</w:t>
+         *   </w:r>
+         *   <w:proofErr w:type="spellEnd"/>
+         *   <w:r>
+         *     <w:t>&gt;</w:t>
+         *   </w:r>
+         * </w:p>
+         * Therefore, __if__ it really exists, we have to do an expensive lookup over multiple runs.
+         */
+        if (!getText().contains(string)) return 0;
+
         int counter = 0;
         for (XWPFRun run : getRuns())
             if (replaceRun(run, string, replace)) counter++;
@@ -66,12 +93,12 @@ public class WordDocument extends Document{
 
     @Override
     public String getOpeningTag() {
-        return getOpeningTag();
+        return OPENING_TAG;
     }
 
     @Override
     public String getClosingTag() {
-        return getClosingTag();
+        return CLOSING_TAG;
     }
 
     @Override
@@ -111,6 +138,7 @@ public class WordDocument extends Document{
     private static boolean replaceRun(XWPFRun run, final String tag, final String replace) {
         if (run == null || tag == null || replace == null) return false;
         String text = run.getText(0);
+        System.out.println(text);
         if (text == null || !text.contains(tag)) return false;
         text = text.replace(tag, replace);
         run.setText(text, 0);
