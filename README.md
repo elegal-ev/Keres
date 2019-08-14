@@ -101,9 +101,3 @@ This project is licensed under the GPL3 - see the [LICENSE](LICENSE) file for de
 
 - Love to everyone who is interested in this project :)
 - Everyone who will learn java programming with this project and the [additional slides (just in german for now, sorry!)](https://elegal-ev.github.io/Presentations/)
-
-<a name="copyright"/>
-
-## Copyright
-
-Valerius Mattfeld, Lars Quentin 2019
