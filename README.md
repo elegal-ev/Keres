@@ -78,7 +78,7 @@ which is basically a wrapper around `./gradlew test` with a few more checks see 
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) as well as our [Code of Conduct](CODE_OF_CONDUCT.md)
+See [CONTRIBUTING](CONTRIBUTING.md) as well as our [Code of Conduct](CODE_OF_CONDUCT.md)
 
 <a name="authors"/>
 
