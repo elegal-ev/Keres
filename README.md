@@ -32,7 +32,7 @@ You basically just need an new jdk, we just support jdk11+
 
 Ubuntu:
 ```
-root# apt-get update && apt-get install openjdk-11-jdk
+$ sudo apt-get update && sudo apt-get install openjdk-11-jdk
 ```
 Windows: (with choco and a admin shell)
 ```
