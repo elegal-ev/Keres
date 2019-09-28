@@ -66,9 +66,9 @@ public class WordDocument extends Document {
     @Override
     public void saveAndCloseFile(String path) throws IOException {
         Objects.requireNonNull(path);
-        if (new File(path).exists()) {
-            throw new IllegalArgumentException("File already existing.");
-        }
+        // The GUI asks whether it should be replaced
+        File testFile = new File(path);
+        if (testFile.exists()) testFile.delete();
         FileOutputStream fileOutputStream = new FileOutputStream(path);
         this.doc.write(fileOutputStream);
         fileOutputStream.flush();

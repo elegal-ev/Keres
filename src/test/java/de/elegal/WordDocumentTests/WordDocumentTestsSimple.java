@@ -91,30 +91,6 @@ public class WordDocumentTestsSimple {
     }
 
     /**
-     * Checks whether it fails when there is already a file existing.
-     * it is intended that it fails since it's better than just losing the old file
-     *
-     * @throws Exception
-     */
-    @Test
-    public void throwsExceptionWhileSavingWhenFileExistsAlready() throws Exception {
-        String tempPath = TEST_PATH + "Lol.docx";
-        File file = new File(tempPath);
-        if (!file.createNewFile())
-            throw new IOException("Internal Test Error creating the test file.");
-        WordDocument wordDocument = new WordDocument(TESTING_FILE);
-        boolean ok = false;
-        try {
-            wordDocument.saveAndCloseFile(tempPath);
-        } catch (Exception ex) {
-            ok = true;
-        }
-        if (!file.delete())
-            throw new IOException("Internal Test Error deleting the test file.");
-        if (!ok) Assert.fail();
-    }
-
-    /**
      * Checking whether getOpeningTag works
      *
      * @throws Exception IOException when creating the WordDocument object
