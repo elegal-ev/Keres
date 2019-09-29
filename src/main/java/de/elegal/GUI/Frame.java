@@ -13,7 +13,6 @@ public class Frame extends JFrame {
         super("Keres");
 
         initTabbedPane();
-        initPanels();
 
         setFrameOptions();
     }
@@ -22,10 +21,6 @@ public class Frame extends JFrame {
         tabbedPane.add("Single", singlePanel);
         tabbedPane.add("CSV", csvPanel);
         this.add(tabbedPane);
-    }
-
-    private void initPanels() {
-
     }
 
     private void setFrameOptions() {
