@@ -1,7 +1,6 @@
 package de.elegal.Documents;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.*;
 
 import java.io.*;
@@ -47,13 +46,13 @@ public class WordDocument extends Document {
      * @throws IOException            When some IO Errors occur
      */
     @Override
-    protected void openFile(String path) throws InvalidFormatException, IOException {
-        File file = new File(path);
+    protected void openFile(String path) throws IOException {
+        // Important: We __don't__ want to change the actual document, so please don't use an OPCPackage, since that's
+        // just a reference, hence all changes will be made on the template as well.
+        FileInputStream fileStream = new FileInputStream(path);
+        Objects.requireNonNull(fileStream, "Something went wrong opening" + path);
 
-        OPCPackage opcPackage = OPCPackage.open(file); // File -> Apache-Doc-Wrapper
-        Objects.requireNonNull(opcPackage, "Something went wrong opening" + path);
-
-        this.doc = new XWPFDocument(opcPackage);
+        this.doc = new XWPFDocument(fileStream);
         Objects.requireNonNull(doc, "Something went wrong parsing" + path);
     }
 
