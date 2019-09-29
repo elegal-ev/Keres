@@ -1,6 +1,7 @@
 package de.elegal.FunctionalTests.WithoutGUI;
 
 import de.elegal.Documents.WordDocument;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +21,15 @@ public class WordDocumentSaving {
         Assert.assertFalse(wordDocument.getText().contains(replacedWith));
     }
 
+    @After
+    public void tearDown() throws Exception {
+        File file = new File(TEMP_FILE);
+        if (file.exists()) {
+            boolean deleted = file.delete();
+            if (!deleted) throw new IOException("File could not be deleted");
+        }
+    }
+
     @Test
     public void replaceAndSaveDoesNotChangeDocument() throws Exception{
         wordDocument.replaceTag("Test", replacedWith);
@@ -29,5 +39,20 @@ public class WordDocumentSaving {
         }
         WordDocument oldDocument = new WordDocument(TESTING_FILE);
         Assert.assertFalse(oldDocument.getText().contains(replacedWith));
+    }
+
+    @Test
+    public void replaceAndSaveAndLoadThenValidateIfItReallyReplaced() throws Exception {
+        wordDocument.replaceTag("Test", replacedWith);
+        wordDocument.saveAndCloseFile(TEMP_FILE);
+        WordDocument reload = new WordDocument(TEMP_FILE);
+        Assert.assertTrue(reload.getText().contains(replacedWith));
+    }
+
+    @Test
+    public void noOperationDoesNothingWhenReloaded() throws Exception {
+        wordDocument.saveAndCloseFile(TEMP_FILE);
+        WordDocument reload = new WordDocument(TEMP_FILE);
+        Assert.assertEquals(wordDocument.getText(), reload.getText());
     }
 }
