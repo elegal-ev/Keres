@@ -1,5 +1,7 @@
 # Keres [![Build Status](https://travis-ci.org/elegal-ev/Keres.svg?branch=master)](https://travis-ci.org/elegal-ev/Keres)
 
+(Archived. It was planned for a java course for law students which is postponed due to the current circumstances)
+
 A library for automatic generation of cease and desist :email: based on docx templates written in :coffee:
 
 ---
@@ -21,8 +23,6 @@ A library for automatic generation of cease and desist :email: based on docx tem
 <a name="getting-started"/>
 
 ## Getting Started
-
-Keres is still active in development, therefore we don't have a maven central repository.
 
 <a name="prerequisites-for-development-build"/>
 
